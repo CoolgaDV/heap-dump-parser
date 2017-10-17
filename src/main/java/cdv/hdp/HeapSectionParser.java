@@ -9,21 +9,21 @@ import java.util.Map;
  * @author Dmitry Kulga
  *         16.10.2017 19:16
  */
-public class HeapSectionParser extends SectionParser {
+class HeapSectionParser extends SectionParser {
 
     private final int border;
     private final Map<Long, Long> instances = new HashMap<>();
     
-    public HeapSectionParser(int offset, byte[] data, int border, int identifierSize) {
+    HeapSectionParser(int offset, byte[] data, int border, int identifierSize) {
         super(offset, data, identifierSize);
         this.border = border;
     }
 
-    public Map<Long, Long> getInstances() {
+    Map<Long, Long> getInstances() {
         return instances;
     }
 
-    public void parse() {
+    void parse() {
         instances.clear();
         while (offset < border) {
             int tag = data[offset] & 0xFF;

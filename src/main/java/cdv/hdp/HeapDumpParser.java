@@ -14,7 +14,7 @@ import java.util.*;
 public class HeapDumpParser extends BaseParser {
 
     public static void main(String[] args) throws Exception {
-        byte[] bytes = Files.readAllBytes(Paths.get("/Users/cdv/Work/stand/hdumps/heap.bin"));
+        byte[] bytes = Files.readAllBytes(Paths.get(args[0]));
         new HeapDumpParser(bytes).readHeap();
     }
 

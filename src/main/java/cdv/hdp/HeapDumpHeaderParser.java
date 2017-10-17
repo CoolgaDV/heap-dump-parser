@@ -8,17 +8,17 @@ import java.nio.charset.StandardCharsets;
  * @author Dmitry Kulga
  *         16.10.2017 19:04
  */
-public class HeapDumpHeaderParser extends BaseParser {
+class HeapDumpHeaderParser extends BaseParser {
 
     private String format;
     private int identifierSize;
     private long timeStamp;
 
-    public HeapDumpHeaderParser(int offset, byte[] data) {
+    HeapDumpHeaderParser(int offset, byte[] data) {
         super(offset, data);
     }
 
-    public void parse() {
+    void parse() {
         while (data[offset] != 0) {
             offset++;
         }
@@ -27,15 +27,15 @@ public class HeapDumpHeaderParser extends BaseParser {
         timeStamp = readU8();
     }
 
-    public String getFormat() {
+    String getFormat() {
         return format;
     }
 
-    public int getIdentifierSize() {
+    int getIdentifierSize() {
         return identifierSize;
     }
 
-    public long getTimeStamp() {
+    long getTimeStamp() {
         return timeStamp;
     }
 
