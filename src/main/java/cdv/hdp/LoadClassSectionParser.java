@@ -24,9 +24,9 @@ public class LoadClassSectionParser extends SectionParser {
     }
 
     public void parse() {
-        offset += 4;
+        offset += U4_SIZE;
         classId = readIdentifier();
-        offset += 4;
+        offset += U4_SIZE;
         classNameId = readIdentifier();
     }
 

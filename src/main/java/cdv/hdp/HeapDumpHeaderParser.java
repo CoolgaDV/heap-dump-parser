@@ -23,8 +23,8 @@ public class HeapDumpHeaderParser extends BaseParser {
             offset++;
         }
         format = new String(data, 0, offset, StandardCharsets.UTF_8);
-        identifierSize = (int) readInt();
-        timeStamp = readLong();
+        identifierSize = (int) readU4();
+        timeStamp = readU8();
     }
 
     public String getFormat() {

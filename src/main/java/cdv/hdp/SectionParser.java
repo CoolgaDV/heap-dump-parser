@@ -17,8 +17,8 @@ public class SectionParser extends BaseParser {
 
     long readIdentifier() {
         switch (identifierSize) {
-            case 4: return readInt();
-            case 8: return readLong();
+            case U4_SIZE: return readU4();
+            case U8_SIZE: return readU8();
             default: throw new IllegalArgumentException(
                     "Unsupported identifier size: " + identifierSize);
         }

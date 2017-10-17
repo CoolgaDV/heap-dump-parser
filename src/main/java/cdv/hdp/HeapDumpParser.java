@@ -14,7 +14,7 @@ import java.util.*;
 public class HeapDumpParser extends BaseParser {
 
     public static void main(String[] args) throws Exception {
-        byte[] bytes = Files.readAllBytes(Paths.get(args[0]));
+        byte[] bytes = Files.readAllBytes(Paths.get("/Users/cdv/Work/stand/hdumps/heap.bin"));
         new HeapDumpParser(bytes).readHeap();
     }
 
@@ -37,9 +37,9 @@ public class HeapDumpParser extends BaseParser {
             RecordTag tag = RecordTag.find(data[offset]);
 
             // read time
-            offset += 4;
+            offset += U4_SIZE;
 
-            int length = (int) readInt();
+            int length = (int) readU4();
 
             if (tag == RecordTag.UTF_8_STRING) {
                 StringSectionParser parser = new StringSectionParser(

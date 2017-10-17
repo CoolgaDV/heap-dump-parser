@@ -30,13 +30,13 @@ public class HeapSectionParser extends SectionParser {
             switch (tag) {
                 case 0xFF: offset += identifierSize; break;
                 case 0x01: offset += 2 * identifierSize; break;
-                case 0x02: offset += identifierSize + 4 + 4; break;
-                case 0x03: offset += identifierSize + 4 + 4; break;
-                case 0x04: offset += identifierSize + 4; break;
+                case 0x02: offset += identifierSize + 2 * U4_SIZE; break;
+                case 0x03: offset += identifierSize + 2 * U4_SIZE; break;
+                case 0x04: offset += identifierSize + U4_SIZE; break;
                 case 0x05: offset += identifierSize; break;
-                case 0x06: offset += identifierSize + 4; break;
+                case 0x06: offset += identifierSize + U4_SIZE; break;
                 case 0x07: offset += identifierSize; break;
-                case 0x08: offset += identifierSize + 4 + 4; break;
+                case 0x08: offset += identifierSize + 2 * U4_SIZE; break;
                 case 0x20: parseClassDump(); break;
                 case 0x21: parseInstanceDump(); break;
                 case 0x22: parseObjectArrayDump(); break;
@@ -48,53 +48,53 @@ public class HeapSectionParser extends SectionParser {
 
     private void parseClassDump() {
 
-        offset += identifierSize + 4 + 6 * identifierSize + 4;
+        offset += identifierSize + U4_SIZE + 6 * identifierSize + U4_SIZE;
 
         // constant pool size
-        int size = readShort();
+        int size = readU2();
         for (int i = 0; i < size; i++) {
-            offset += 2;
-            int type = readByte();
+            offset += U2_SIZE;
+            int type = readU1();
             offset += getSize(type);
         }
 
         // number of static fields
-        size = readShort();
+        size = readU2();
         for (int i = 0; i < size; i++) {
             offset += identifierSize;
-            int type = readByte();
+            int type = readU1();
             offset += getSize(type);
         }
 
         // number of instance fields
-        size = readShort();
+        size = readU2();
         for (int i = 0; i < size; i++) {
-            offset += identifierSize + 1;
+            offset += identifierSize + U1_SIZE;
         }
     }
 
     private void parseInstanceDump() {
-        offset += identifierSize + 4;
-        long classId = readLong();
+        offset += identifierSize + U4_SIZE;
+        long classId = readU8();
         Long count = instances.get(classId);
         instances.put(classId, count == null ? 1 : count + 1);
-        long size = readInt();
+        long size = readU4();
         offset += size;
     }
 
     private void parseObjectArrayDump() {
-        offset += identifierSize + 4;
-        long size = readInt();
-        long classId = readLong();
+        offset += identifierSize + U4_SIZE;
+        long size = readU4();
+        long classId = readU8();
         Long count = instances.get(classId);
         instances.put(classId, count == null ? 1 : count + 1);
         offset += identifierSize * size;
     }
 
     private void parsePrimitiveArrayDump() {
-        offset += identifierSize + 4;
-        long size = readInt();
-        int valueSize = getSize(readByte());
+        offset += identifierSize + U4_SIZE;
+        long size = readU4();
+        int valueSize = getSize(readU1());
         offset += size * valueSize;
     }
 
