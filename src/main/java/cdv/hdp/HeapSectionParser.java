@@ -26,21 +26,21 @@ class HeapSectionParser extends SectionParser {
     void parse() {
         instances.clear();
         while (offset < border) {
-            int tag = data[offset] & 0xFF;
+            HeapSectionTag tag = HeapSectionTag.find(data[offset] & 0xFF);
             switch (tag) {
-                case 0xFF: offset += identifierSize; break;
-                case 0x01: offset += 2 * identifierSize; break;
-                case 0x02: offset += identifierSize + 2 * U4_SIZE; break;
-                case 0x03: offset += identifierSize + 2 * U4_SIZE; break;
-                case 0x04: offset += identifierSize + U4_SIZE; break;
-                case 0x05: offset += identifierSize; break;
-                case 0x06: offset += identifierSize + U4_SIZE; break;
-                case 0x07: offset += identifierSize; break;
-                case 0x08: offset += identifierSize + 2 * U4_SIZE; break;
-                case 0x20: parseClassDump(); break;
-                case 0x21: parseInstanceDump(); break;
-                case 0x22: parseObjectArrayDump(); break;
-                case 0x23: parsePrimitiveArrayDump(); break;
+                case ROOT_UNKNOWN: offset += identifierSize; break;
+                case ROOT_JNI_GLOBAL: offset += 2 * identifierSize; break;
+                case ROOT_JNI_LOCAL: offset += identifierSize + 2 * U4_SIZE; break;
+                case ROOT_JAVA_FRAME: offset += identifierSize + 2 * U4_SIZE; break;
+                case ROOT_NATIVE_STACK: offset += identifierSize + U4_SIZE; break;
+                case ROOT_STICKY_CLASS: offset += identifierSize; break;
+                case ROOT_THREAD_BLOCK: offset += identifierSize + U4_SIZE; break;
+                case ROOT_MONITOR_USED: offset += identifierSize; break;
+                case ROOT_THREAD_OBJECT: offset += identifierSize + 2 * U4_SIZE; break;
+                case CLASS_DUMP: parseClassDump(); break;
+                case INSTANCE_DUMP: parseInstanceDump(); break;
+                case OBJECT_ARRAY_DUMP: parseObjectArrayDump(); break;
+                case PRIMITIVE_ARRAY_DUMP: parsePrimitiveArrayDump(); break;
             }
             offset++;
         }
@@ -99,17 +99,18 @@ class HeapSectionParser extends SectionParser {
     }
 
     private int getSize(int code) {
-        switch(code) {
-            case 2: return identifierSize;
-            case 4: return 1;
-            case 5: return 2;
-            case 6: return 4;
-            case 7: return 8;
-            case 8: return 1;
-            case 9: return 2;
-            case 10: return 4;
-            case 11: return 8;
-            default: throw new IllegalArgumentException("Unknown code: " + code);
+        BasicType type = BasicType.find(code);
+        switch(type) {
+            case OBJECT: return identifierSize;
+            case BOOLEAN: return 1;
+            case CHAR: return 2;
+            case FLOAT: return 4;
+            case DOUBLE: return 8;
+            case BYTE: return 1;
+            case SHORT: return 2;
+            case INT: return 4;
+            case LONG: return 8;
+            default: throw new IllegalArgumentException("Unknown basic type: " + type);
         }
     }
     
