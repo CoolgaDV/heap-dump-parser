@@ -3,10 +3,10 @@ package cdv.hdp;
 import java.util.Arrays;
 
 /**
- * TODO: write comments here
+ * Basic types of values in class and instance dumps
  *
  * @author Dmitry Kulga
- * 17.10.2017 21:09
+ *         17.10.2017 21:09
  */
 public enum BasicType {
 

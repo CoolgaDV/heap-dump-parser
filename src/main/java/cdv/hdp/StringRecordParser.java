@@ -3,19 +3,19 @@ package cdv.hdp;
 import java.nio.charset.StandardCharsets;
 
 /**
- * TODO: write comments here
+ * Parser for UTF-8 string record
  *
  * @author Dmitry Kulga
- * 16.10.2017 19:17
+ *         16.10.2017 19:17
  */
-class StringSectionParser extends SectionParser {
+class StringRecordParser extends RecordParser {
 
     private final int length;
 
     private long id;
     private String string;
 
-    StringSectionParser(int offset, byte[] data, int length, int identifierSize) {
+    StringRecordParser(int offset, byte[] data, int length, int identifierSize) {
         super(offset, data, identifierSize);
         this.length = length;
     }

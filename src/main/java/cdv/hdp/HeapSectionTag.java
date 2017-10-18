@@ -3,10 +3,10 @@ package cdv.hdp;
 import java.util.Arrays;
 
 /**
- * TODO: write comments here
+ * Tags in heap dump or heap dump segment record
  *
  * @author Dmitry Kulga
- * 17.10.2017 21:36
+ *         17.10.2017 21:36
  */
 public enum HeapSectionTag {
 

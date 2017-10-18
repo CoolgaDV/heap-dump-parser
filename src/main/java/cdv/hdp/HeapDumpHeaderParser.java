@@ -3,7 +3,7 @@ package cdv.hdp;
 import java.nio.charset.StandardCharsets;
 
 /**
- * TODO: write comments here
+ * Heap dump header parser
  *
  * @author Dmitry Kulga
  *         16.10.2017 19:04

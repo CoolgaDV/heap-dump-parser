@@ -4,10 +4,10 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
- * TODO: write comments here
+ * Report to be displayed as application execution result
  *
  * @author Dmitry Kulga
- * 18.10.2017 09:13
+ *         18.10.2017 09:13
  */
 public class HeapSummaryReport {
 

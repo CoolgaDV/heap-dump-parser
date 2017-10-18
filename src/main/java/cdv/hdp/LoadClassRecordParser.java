@@ -1,17 +1,17 @@
 package cdv.hdp;
 
 /**
- * TODO: write comments here
+ * Parser for load class record
  *
  * @author Dmitry Kulga
- * 16.10.2017 19:17
+ *         16.10.2017 19:17
  */
-class LoadClassSectionParser extends SectionParser {
+class LoadClassRecordParser extends RecordParser {
 
     private long classId;
     private long classNameId;
 
-    LoadClassSectionParser(int offset, byte[] data, int identifierSize) {
+    LoadClassRecordParser(int offset, byte[] data, int identifierSize) {
         super(offset, data, identifierSize);
     }
 

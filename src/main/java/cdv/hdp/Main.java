@@ -5,7 +5,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
- * TODO: write comments here
+ * Application entry point
  *
  * @author Dmitry Kulga
  *         18.10.2017 08:48

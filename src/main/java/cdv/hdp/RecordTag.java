@@ -3,10 +3,10 @@ package cdv.hdp;
 import java.util.Arrays;
 
 /**
- * TODO: write comments here
+ * Types of heap dump records
  *
  * @author Dmitry Kulga
- * 16.10.2017 20:48
+ *         16.10.2017 20:48
  */
 enum RecordTag {
 

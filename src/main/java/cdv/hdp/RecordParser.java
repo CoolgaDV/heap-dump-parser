@@ -1,16 +1,16 @@
 package cdv.hdp;
 
 /**
- * TODO: write comments here
+ * Basic class for record parsers
  *
  * @author Dmitry Kulga
  *         16.10.2017 21:28
  */
-class SectionParser extends BaseParser {
+class RecordParser extends BaseParser {
 
     final int identifierSize;
 
-    SectionParser(int offset, byte[] data, int identifierSize) {
+    RecordParser(int offset, byte[] data, int identifierSize) {
         super(offset, data);
         this.identifierSize = identifierSize;
     }

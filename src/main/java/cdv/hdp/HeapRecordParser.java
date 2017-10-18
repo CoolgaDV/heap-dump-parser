@@ -4,17 +4,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * TODO: write comments here
+ * Parser for heap dump or heap dump segment record
  *
  * @author Dmitry Kulga
  *         16.10.2017 19:16
  */
-class HeapSectionParser extends SectionParser {
+class HeapRecordParser extends RecordParser {
 
     private final int border;
     private final Map<Long, Long> instances = new HashMap<>();
     
-    HeapSectionParser(int offset, byte[] data, int border, int identifierSize) {
+    HeapRecordParser(int offset, byte[] data, int border, int identifierSize) {
         super(offset, data, identifierSize);
         this.border = border;
     }

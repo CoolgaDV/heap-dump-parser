@@ -1,7 +1,7 @@
 package cdv.hdp;
 
 /**
- * TODO: write comments here
+ * Basic parser with common methods for reading data blocks
  *
  * @author Dmitry Kulga
  *         16.10.2017 19:10

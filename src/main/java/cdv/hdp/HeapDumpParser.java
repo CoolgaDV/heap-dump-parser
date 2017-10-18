@@ -3,7 +3,7 @@ package cdv.hdp;
 import java.io.IOException;
 
 /**
- * TODO: write comments here
+ * High-level heap dump parser
  *
  * @author Dmitry Kulga
  *         16.10.2017 19:03
@@ -34,7 +34,7 @@ class HeapDumpParser extends BaseParser {
             int length = (int) readU4();
 
             if (tag == RecordTag.UTF_8_STRING) {
-                StringSectionParser parser = new StringSectionParser(
+                StringRecordParser parser = new StringRecordParser(
                         offset,
                         data,
                         length,
@@ -43,7 +43,7 @@ class HeapDumpParser extends BaseParser {
                 report.addString(parser.getId(), parser.getString());
             }
             if (tag == RecordTag.LOAD_CLASS) {
-                LoadClassSectionParser parser = new LoadClassSectionParser(
+                LoadClassRecordParser parser = new LoadClassRecordParser(
                         offset,
                         data,
                         headerParser.getIdentifierSize());
@@ -51,7 +51,7 @@ class HeapDumpParser extends BaseParser {
                 report.addClass(parser.getClassId(), parser.getClassNameId());
             }
             if (tag == RecordTag.HEAP_DUMP || tag == RecordTag.HEAP_DUMP_SEGMENT) {
-                HeapSectionParser parser = new HeapSectionParser(
+                HeapRecordParser parser = new HeapRecordParser(
                         offset + 1,
                         data,
                         offset + length,
