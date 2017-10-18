@@ -1,4 +1,4 @@
-package cdv.hdp;
+package cdv.hdp.parser;
 
 import java.nio.charset.StandardCharsets;
 

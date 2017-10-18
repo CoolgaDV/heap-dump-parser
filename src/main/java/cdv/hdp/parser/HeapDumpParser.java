@@ -1,4 +1,7 @@
-package cdv.hdp;
+package cdv.hdp.parser;
+
+import cdv.hdp.HeapSummaryReport;
+import cdv.hdp.protocol.RecordTag;
 
 import java.io.IOException;
 
@@ -8,13 +11,13 @@ import java.io.IOException;
  * @author Dmitry Kulga
  *         16.10.2017 19:03
  */
-class HeapDumpParser extends BaseParser {
+public class HeapDumpParser extends BaseParser {
 
-    HeapDumpParser(byte[] bytes) {
+    public HeapDumpParser(byte[] bytes) {
         super(0, bytes);
     }
 
-    HeapSummaryReport readHeap() throws IOException {
+    public HeapSummaryReport readHeap() throws IOException {
 
         HeapDumpHeaderParser headerParser = new HeapDumpHeaderParser(0, data);
         headerParser.parse();

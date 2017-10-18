@@ -1,4 +1,7 @@
-package cdv.hdp;
+package cdv.hdp.parser;
+
+import cdv.hdp.protocol.BasicType;
+import cdv.hdp.protocol.HeapSectionTag;
 
 import java.util.HashMap;
 import java.util.Map;

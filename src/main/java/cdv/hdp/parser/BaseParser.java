@@ -1,4 +1,4 @@
-package cdv.hdp;
+package cdv.hdp.parser;
 
 /**
  * Basic parser with common methods for reading data blocks

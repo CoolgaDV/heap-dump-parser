@@ -1,4 +1,4 @@
-package cdv.hdp;
+package cdv.hdp.parser;
 
 /**
  * Parser for load class record

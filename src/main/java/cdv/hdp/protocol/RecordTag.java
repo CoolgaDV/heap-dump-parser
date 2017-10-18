@@ -1,4 +1,4 @@
-package cdv.hdp;
+package cdv.hdp.protocol;
 
 import java.util.Arrays;
 
@@ -8,7 +8,7 @@ import java.util.Arrays;
  * @author Dmitry Kulga
  *         16.10.2017 20:48
  */
-enum RecordTag {
+public enum RecordTag {
 
     UTF_8_STRING(0x01),
     LOAD_CLASS(0x02),
@@ -31,7 +31,7 @@ enum RecordTag {
         this.code = code;
     }
 
-    static RecordTag find(int code) {
+    public static RecordTag find(int code) {
         return Arrays.stream(values())
                 .filter(tag -> tag.code == code)
                 .findAny()

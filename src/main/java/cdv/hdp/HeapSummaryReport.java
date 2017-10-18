@@ -18,25 +18,25 @@ public class HeapSummaryReport {
     private String format;
     private String timestamp;
 
-    HeapSummaryReport withFormat(String format) {
+    public HeapSummaryReport withFormat(String format) {
         this.format = format;
         return this;
     }
 
-    HeapSummaryReport withTimestamp(long timestamp) {
+    public HeapSummaryReport withTimestamp(long timestamp) {
         this.timestamp = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date(timestamp));
         return this;
     }
 
-    void addString(long id, String value) {
+    public void addString(long id, String value) {
         strings.put(id, value);
     }
 
-    void addClass(long classId, long classNameId) {
+    public void addClass(long classId, long classNameId) {
         classes.put(classId, classNameId);
     }
 
-    void addInstances(Map<Long, Long> newInstances) {
+    public void addInstances(Map<Long, Long> newInstances) {
         for (Map.Entry<Long, Long> classInstances : newInstances.entrySet()) {
             long classId = classInstances.getKey();
             long instancesCount = classInstances.getValue();

@@ -1,4 +1,4 @@
-package cdv.hdp;
+package cdv.hdp.parser;
 
 /**
  * Basic class for record parsers
@@ -6,7 +6,7 @@ package cdv.hdp;
  * @author Dmitry Kulga
  *         16.10.2017 21:28
  */
-class RecordParser extends BaseParser {
+abstract class RecordParser extends BaseParser {
 
     final int identifierSize;
 

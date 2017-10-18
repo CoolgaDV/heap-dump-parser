@@ -1,4 +1,4 @@
-package cdv.hdp;
+package cdv.hdp.protocol;
 
 import java.util.Arrays;
 
@@ -30,7 +30,7 @@ public enum HeapSectionTag {
         this.code = code;
     }
 
-    static HeapSectionTag find(int code) {
+    public static HeapSectionTag find(int code) {
         return Arrays.stream(values())
                 .filter(tag -> tag.code == code)
                 .findAny()

@@ -1,4 +1,4 @@
-package cdv.hdp;
+package cdv.hdp.protocol;
 
 import java.util.Arrays;
 
@@ -26,7 +26,7 @@ public enum BasicType {
         this.code = code;
     }
 
-    static BasicType find(int code) {
+    public static BasicType find(int code) {
         return Arrays.stream(values())
                 .filter(tag -> tag.code == code)
                 .findAny()
