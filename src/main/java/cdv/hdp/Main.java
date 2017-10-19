@@ -22,14 +22,18 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
 
+        long startTimeMillis = System.currentTimeMillis();
+
         Path heapLocation = getHeapLocation();
         long instancesCountThreshold = getInstanceCountThreshold();
         int chunkSize = getChunkSize() * 1024 * 1024;
 
         try (HeapCursor heapCursor = new HeapCursor(chunkSize, heapLocation)) {
             ChunkCursor chunkCursor = heapCursor.init();
-            HeapSummaryReport report = new HeapDumpParser(chunkCursor).readHeap();
-            report.toConsole(instancesCountThreshold);
+            new HeapDumpParser(chunkCursor).readHeap()
+                    .withReadTimeMillis(heapCursor.getReadTimeMillis())
+                    .withTotalTimeMillis(System.currentTimeMillis() - startTimeMillis)
+                    .toConsole(instancesCountThreshold);
         }
     }
 

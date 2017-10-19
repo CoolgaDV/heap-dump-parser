@@ -17,6 +17,8 @@ public class HeapSummaryReport {
 
     private String format;
     private String timestamp;
+    private long readTimeMillis;
+    private long totalTimeMillis;
 
     public HeapSummaryReport withFormat(String format) {
         this.format = format;
@@ -25,6 +27,16 @@ public class HeapSummaryReport {
 
     public HeapSummaryReport withTimestamp(long timestamp) {
         this.timestamp = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date(timestamp));
+        return this;
+    }
+
+    HeapSummaryReport withReadTimeMillis(long readTimeMillis) {
+        this.readTimeMillis = readTimeMillis;
+        return this;
+    }
+
+    HeapSummaryReport withTotalTimeMillis(long overallTimeMillis) {
+        this.totalTimeMillis = overallTimeMillis;
         return this;
     }
 
@@ -78,6 +90,11 @@ public class HeapSummaryReport {
                 System.out.println("   " + classInstancesSummary.format(maxInstancesCountLength));
             }
         }
+        System.out.println();
+        System.out.println("=== Execution time ===");
+        System.out.println(" Read time:       " + readTimeMillis + " ms");
+        System.out.println(" Processing time: " + (totalTimeMillis - readTimeMillis) + " ms");
+        System.out.println(" Total time:      " + totalTimeMillis + " ms");
     }
 
     private static class ClassInstancesSummary implements Comparable<ClassInstancesSummary> {

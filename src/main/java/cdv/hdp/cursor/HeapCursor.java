@@ -20,6 +20,7 @@ public class HeapCursor implements AutoCloseable {
     private final Path heapLocation;
     private FileInputStream stream;
     private boolean noMoreChunks = false;
+    private long readTimeMillis = 0;
 
     public HeapCursor(int chunkSizeLimit, Path heapLocation) {
         this.chunkSizeLimit = chunkSizeLimit;
@@ -32,6 +33,9 @@ public class HeapCursor implements AutoCloseable {
     }
 
     byte[] readNextChunk() throws IOException {
+
+        long startTimeMillis = System.currentTimeMillis();
+
         byte[] buffer = new byte[READ_BUFFER_SIZE];
         ByteArrayOutputStream chunkBuffer = new ByteArrayOutputStream(chunkSizeLimit);
         int read = 0;
@@ -43,11 +47,18 @@ public class HeapCursor implements AutoCloseable {
             }
             chunkBuffer.write(buffer, 0, read);
         }
+
+        readTimeMillis += System.currentTimeMillis() - startTimeMillis;
+
         return chunkBuffer.toByteArray();
     }
 
     boolean isNoMoreChunks() {
         return noMoreChunks;
+    }
+
+    public long getReadTimeMillis() {
+        return readTimeMillis;
     }
 
     @Override
