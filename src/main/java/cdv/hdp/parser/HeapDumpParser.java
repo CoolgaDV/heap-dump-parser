@@ -1,6 +1,7 @@
 package cdv.hdp.parser;
 
 import cdv.hdp.HeapSummaryReport;
+import cdv.hdp.cursor.ChunkCursor;
 import cdv.hdp.protocol.RecordTag;
 
 import java.io.IOException;
@@ -13,57 +14,63 @@ import java.io.IOException;
  */
 public class HeapDumpParser extends BaseParser {
 
-    public HeapDumpParser(byte[] bytes) {
-        super(0, bytes);
+    public HeapDumpParser(ChunkCursor cursor) {
+        super(cursor);
     }
 
     public HeapSummaryReport readHeap() throws IOException {
 
-        HeapDumpHeaderParser headerParser = new HeapDumpHeaderParser(0, data);
+        HeapDumpHeaderParser headerParser = new HeapDumpHeaderParser(cursor);
         headerParser.parse();
-        offset = headerParser.offset;
 
         HeapSummaryReport report = new HeapSummaryReport()
                 .withFormat(headerParser.getFormat())
                 .withTimestamp(headerParser.getTimeStamp());
 
-        while (++offset < data.length) {
+        while (cursor.hasMoreBytes()) {
 
-            RecordTag tag = RecordTag.find(data[offset]);
+            RecordTag tag = RecordTag.find(cursor.readU1());
 
             // read time
-            offset += U4_SIZE;
+            cursor.skipBytes(ChunkCursor.U4_SIZE);
 
-            int length = (int) readU4();
+            int length = (int) cursor.readU4();
 
-            if (tag == RecordTag.UTF_8_STRING) {
-                StringRecordParser parser = new StringRecordParser(
-                        offset,
-                        data,
-                        length,
-                        headerParser.getIdentifierSize());
-                parser.parse();
-                report.addString(parser.getId(), parser.getString());
+            switch (tag) {
+                case UTF_8_STRING: {
+                    StringRecordParser parser = new StringRecordParser(
+                            cursor,
+                            length,
+                            headerParser.getIdentifierSize());
+                    parser.parse();
+                    report.addString(parser.getId(), parser.getString());
+                    break;
+                }
+                case LOAD_CLASS: {
+                    LoadClassRecordParser parser = new LoadClassRecordParser(
+                            cursor,
+                            headerParser.getIdentifierSize());
+                    parser.parse();
+                    report.addClass(parser.getClassId(), parser.getClassNameId());
+                    break;
+                }
+                case HEAP_DUMP:
+                case HEAP_DUMP_SEGMENT: {
+                    HeapRecordParser parser = new HeapRecordParser(
+                            cursor,
+                            length,
+                            headerParser.getIdentifierSize());
+                    parser.parse();
+                    report.addInstances(parser.getInstances());
+                    break;
+                }
+                default: {
+                    cursor.skipBytes(length);
+                    break;
+                }
             }
-            if (tag == RecordTag.LOAD_CLASS) {
-                LoadClassRecordParser parser = new LoadClassRecordParser(
-                        offset,
-                        data,
-                        headerParser.getIdentifierSize());
-                parser.parse();
-                report.addClass(parser.getClassId(), parser.getClassNameId());
-            }
-            if (tag == RecordTag.HEAP_DUMP || tag == RecordTag.HEAP_DUMP_SEGMENT) {
-                HeapRecordParser parser = new HeapRecordParser(
-                        offset + 1,
-                        data,
-                        offset + length,
-                        headerParser.getIdentifierSize());
-                parser.parse();
-                report.addInstances(parser.getInstances());
-            }
-            offset += length;
         }
+
         return report;
     }
 

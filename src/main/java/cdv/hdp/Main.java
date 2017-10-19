@@ -1,5 +1,7 @@
 package cdv.hdp;
 
+import cdv.hdp.cursor.ChunkCursor;
+import cdv.hdp.cursor.HeapCursor;
 import cdv.hdp.parser.HeapDumpParser;
 
 import java.nio.file.Files;
@@ -16,16 +18,19 @@ public class Main {
 
     private static final String HEAP_LOCATION_PROPERTY = "heap.location";
     private static final String INSTANCES_COUNT_THRESHOLD_PROPERTY = "instances.count.threshold";
+    private static final String CHUNK_SIZE_PROPERTY = "chunk.size";
 
     public static void main(String[] args) throws Exception {
 
         Path heapLocation = getHeapLocation();
         long instancesCountThreshold = getInstanceCountThreshold();
+        int chunkSize = getChunkSize() * 1024 * 1024;
 
-        byte[] bytes = Files.readAllBytes(heapLocation);
-        HeapSummaryReport report = new HeapDumpParser(bytes).readHeap();
-
-        report.toConsole(instancesCountThreshold);
+        try (HeapCursor heapCursor = new HeapCursor(chunkSize, heapLocation)) {
+            ChunkCursor chunkCursor = heapCursor.init();
+            HeapSummaryReport report = new HeapDumpParser(chunkCursor).readHeap();
+            report.toConsole(instancesCountThreshold);
+        }
     }
 
     private static Path getHeapLocation() {
@@ -62,6 +67,28 @@ public class Main {
         }
         System.out.println("Using instances count threshold: " + threshold + ".");
         return threshold;
+    }
+
+    private static int getChunkSize() {
+        String chunkSizeProperty = System.getProperty(CHUNK_SIZE_PROPERTY);
+        if (chunkSizeProperty == null) {
+            throw new IllegalArgumentException("Chunk size is not specified. " +
+                    "To do that specify '" + CHUNK_SIZE_PROPERTY + "' " +
+                    "property using '-D' Java command line option. " +
+                    "Chunk size is set in megabytes.");
+        }
+        int chunkSize;
+        try {
+            chunkSize = Integer.parseInt(chunkSizeProperty);
+        } catch (NumberFormatException ex) {
+            throw new IllegalArgumentException("Chunk size parsing failure.");
+        }
+        if (chunkSize < 1) {
+            throw new IllegalArgumentException(
+                    "Chunk size should be a positive number.");
+        }
+        System.out.println("Using chunk size: " + chunkSize + ".");
+        return chunkSize;
     }
 
 }

@@ -1,5 +1,8 @@
 package cdv.hdp.parser;
 
+import cdv.hdp.cursor.ChunkCursor;
+
+import java.io.ByteArrayOutputStream;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -15,8 +18,8 @@ class StringRecordParser extends RecordParser {
     private long id;
     private String string;
 
-    StringRecordParser(int offset, byte[] data, int length, int identifierSize) {
-        super(offset, data, identifierSize);
+    StringRecordParser(ChunkCursor cursor, int length, int identifierSize) {
+        super(cursor, identifierSize);
         this.length = length;
     }
 
@@ -29,12 +32,16 @@ class StringRecordParser extends RecordParser {
     }
 
     void parse() {
-        string = new String(
-                data,
-                offset + identifierSize + 1,
-                length - identifierSize,
-                StandardCharsets.UTF_8);
+
         id = readIdentifier();
+
+        ByteArrayOutputStream stringBuffer = new ByteArrayOutputStream();
+        int stringLength = length - identifierSize;
+        for (int index = 0; index < stringLength; index++) {
+            stringBuffer.write(cursor.readU1());
+        }
+        byte[] stringBytes = stringBuffer.toByteArray();
+        string = new String(stringBytes, 0, stringBytes.length, StandardCharsets.UTF_8);
     }
 
 }

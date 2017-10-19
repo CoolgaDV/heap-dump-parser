@@ -1,5 +1,8 @@
 package cdv.hdp.parser;
 
+import cdv.hdp.cursor.ChunkCursor;
+
+import java.io.ByteArrayOutputStream;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -14,17 +17,20 @@ class HeapDumpHeaderParser extends BaseParser {
     private int identifierSize;
     private long timeStamp;
 
-    HeapDumpHeaderParser(int offset, byte[] data) {
-        super(offset, data);
+    HeapDumpHeaderParser(ChunkCursor cursor) {
+        super(cursor);
     }
 
     void parse() {
-        while (data[offset] != 0) {
-            offset++;
+        ByteArrayOutputStream stringBuffer = new ByteArrayOutputStream();
+        int read;
+        while ((read = cursor.readU1()) != 0) {
+            stringBuffer.write(read);
         }
-        format = new String(data, 0, offset, StandardCharsets.UTF_8);
-        identifierSize = (int) readU4();
-        timeStamp = readU8();
+        byte[] stringBytes = stringBuffer.toByteArray();
+        format = new String(stringBytes, 0, stringBytes.length - 1, StandardCharsets.UTF_8);
+        identifierSize = (int) cursor.readU4();
+        timeStamp = cursor.readU8();
     }
 
     String getFormat() {

@@ -1,5 +1,10 @@
 package cdv.hdp.parser;
 
+import cdv.hdp.cursor.ChunkCursor;
+
+import static cdv.hdp.cursor.ChunkCursor.U4_SIZE;
+import static cdv.hdp.cursor.ChunkCursor.U8_SIZE;
+
 /**
  * Basic class for record parsers
  *
@@ -10,15 +15,15 @@ abstract class RecordParser extends BaseParser {
 
     final int identifierSize;
 
-    RecordParser(int offset, byte[] data, int identifierSize) {
-        super(offset, data);
+    RecordParser(ChunkCursor cursor, int identifierSize) {
+        super(cursor);
         this.identifierSize = identifierSize;
     }
 
     long readIdentifier() {
         switch (identifierSize) {
-            case U4_SIZE: return readU4();
-            case U8_SIZE: return readU8();
+            case U4_SIZE: return cursor.readU4();
+            case U8_SIZE: return cursor.readU8();
             default: throw new IllegalArgumentException(
                     "Unsupported identifier size: " + identifierSize);
         }

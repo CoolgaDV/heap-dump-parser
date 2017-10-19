@@ -1,5 +1,9 @@
 package cdv.hdp.parser;
 
+import cdv.hdp.cursor.ChunkCursor;
+
+import static cdv.hdp.cursor.ChunkCursor.U4_SIZE;
+
 /**
  * Parser for load class record
  *
@@ -11,8 +15,8 @@ class LoadClassRecordParser extends RecordParser {
     private long classId;
     private long classNameId;
 
-    LoadClassRecordParser(int offset, byte[] data, int identifierSize) {
-        super(offset, data, identifierSize);
+    LoadClassRecordParser(ChunkCursor cursor, int identifierSize) {
+        super(cursor, identifierSize);
     }
 
     long getClassId() {
@@ -24,9 +28,9 @@ class LoadClassRecordParser extends RecordParser {
     }
 
     void parse() {
-        offset += U4_SIZE;
+        cursor.skipBytes(U4_SIZE);
         classId = readIdentifier();
-        offset += U4_SIZE;
+        cursor.skipBytes(U4_SIZE);
         classNameId = readIdentifier();
     }
 
