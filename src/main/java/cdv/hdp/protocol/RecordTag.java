@@ -1,42 +1,30 @@
 package cdv.hdp.protocol;
 
-import java.util.Arrays;
-
 /**
- * Types of heap dump records
+ * Types of heap dump records.
+ * Used block of constants instead of enum because of performance reasons.
  *
  * @author Dmitry Kulga
  *         16.10.2017 20:48
  */
-public enum RecordTag {
+public class RecordTag {
 
-    UTF_8_STRING(0x01),
-    LOAD_CLASS(0x02),
-    UNLOAD_CLASS(0x03),
-    STACK_FRAME(0x04),
-    STACK_TRACE(0x05),
-    ALLOC_SITES(0x06),
-    HEAP_SUMMARY(0x07),
-    START_THREAD(0x0A),
-    END_THREAD(0x0B),
-    HEAP_DUMP(0x0C),
-    HEAP_DUMP_SEGMENT(0x1C),
-    HEAP_DUMP_END(0x2C),
-    CPU_SAMPLES(0x0D),
-    CONTROL_SETTINGS(0x0E);
+    public static final int UTF_8_STRING = 0x01;
+    public static final int LOAD_CLASS = 0x02;
+    public static final int UNLOAD_CLASS = 0x03;
+    public static final int STACK_FRAME = 0x04;
+    public static final int STACK_TRACE = 0x05;
+    public static final int ALLOC_SITES = 0x06;
+    public static final int HEAP_SUMMARY = 0x07;
+    public static final int START_THREAD = 0x0A;
+    public static final int END_THREAD = 0x0B;
+    public static final int HEAP_DUMP = 0x0C;
+    public static final int HEAP_DUMP_SEGMENT = 0x1C;
+    public static final int HEAP_DUMP_END = 0x2C;
+    public static final int CPU_SAMPLES = 0x0D;
+    public static final int CONTROL_SETTINGS = 0x0E;
 
-    private final int code;
-
-    RecordTag(int code) {
-        this.code = code;
-    }
-
-    public static RecordTag find(int code) {
-        return Arrays.stream(values())
-                .filter(tag -> tag.code == code)
-                .findAny()
-                .orElseThrow(() -> new IllegalArgumentException(
-                        "Unknown record tag code: " + code));
-    }
+    /** Utility class - forbid instantiation */
+    private RecordTag() { }
 
 }

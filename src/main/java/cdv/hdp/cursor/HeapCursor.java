@@ -14,7 +14,7 @@ import java.nio.file.Path;
  */
 public class HeapCursor implements AutoCloseable {
 
-    private static final int READ_BUFFER_SIZE = 4096;
+    private static final int READ_BUFFER_SIZE = 32 * 1024;
 
     private final int chunkSizeLimit;
     private final Path heapLocation;

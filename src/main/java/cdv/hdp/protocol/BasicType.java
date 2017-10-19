@@ -1,37 +1,25 @@
 package cdv.hdp.protocol;
 
-import java.util.Arrays;
-
 /**
- * Basic types of values in class and instance dumps
+ * Basic types of values in class and instance dumps.
+ * Used block of constants instead of enum because of performance reasons.
  *
  * @author Dmitry Kulga
  *         17.10.2017 21:09
  */
-public enum BasicType {
+public class BasicType {
 
-    OBJECT(2),
-    BOOLEAN(4),
-    CHAR(5),
-    FLOAT(6),
-    DOUBLE(7),
-    BYTE(8),
-    SHORT(9),
-    INT(10),
-    LONG(11);
+    public static final int OBJECT = 2;
+    public static final int BOOLEAN = 4;
+    public static final int CHAR = 5;
+    public static final int FLOAT = 6;
+    public static final int DOUBLE = 7;
+    public static final int BYTE = 8;
+    public static final int SHORT = 9;
+    public static final int INT = 10;
+    public static final int LONG = 11;
 
-    private int code;
-
-    BasicType(int code) {
-        this.code = code;
-    }
-
-    public static BasicType find(int code) {
-        return Arrays.stream(values())
-                .filter(tag -> tag.code == code)
-                .findAny()
-                .orElseThrow(() -> new IllegalArgumentException(
-                        "Unknown basic type code: " + code));
-    }
+    /** Utility class - forbid instantiation */
+    private BasicType() { }
 
 }

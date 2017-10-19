@@ -1,15 +1,13 @@
 package cdv.hdp.parser;
 
 import cdv.hdp.cursor.ChunkCursor;
-import cdv.hdp.protocol.BasicType;
-import cdv.hdp.protocol.HeapSectionTag;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static cdv.hdp.cursor.ChunkCursor.U1_SIZE;
-import static cdv.hdp.cursor.ChunkCursor.U2_SIZE;
-import static cdv.hdp.cursor.ChunkCursor.U4_SIZE;
+import static cdv.hdp.cursor.ChunkCursor.*;
+import static cdv.hdp.protocol.HeapSectionTag.*;
+import static cdv.hdp.protocol.BasicType.*;
 
 /**
  * Parser for heap dump or heap dump segment record
@@ -36,8 +34,7 @@ class HeapRecordParser extends RecordParser {
     void parse() {
         instances.clear();
         while (bytesRead < border) {
-            HeapSectionTag tag = HeapSectionTag.find(readU1() & 0xFF);
-            switch (tag) {
+            switch (readU1()) {
                 case ROOT_UNKNOWN: skipBytes(identifierSize); break;
                 case ROOT_JNI_GLOBAL: skipBytes(2 * identifierSize); break;
                 case ROOT_JNI_LOCAL: skipBytes(identifierSize + 2 * U4_SIZE); break;
@@ -133,8 +130,7 @@ class HeapRecordParser extends RecordParser {
     }
 
     private int getSize(int code) {
-        BasicType type = BasicType.find(code);
-        switch(type) {
+        switch(code) {
             case OBJECT: return identifierSize;
             case BOOLEAN: return 1;
             case CHAR: return 2;
@@ -144,7 +140,7 @@ class HeapRecordParser extends RecordParser {
             case SHORT: return 2;
             case INT: return 4;
             case LONG: return 8;
-            default: throw new IllegalArgumentException("Unknown basic type: " + type);
+            default: throw new IllegalArgumentException("Unknown basic type code: " + code);
         }
     }
     

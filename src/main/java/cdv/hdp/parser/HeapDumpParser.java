@@ -2,9 +2,10 @@ package cdv.hdp.parser;
 
 import cdv.hdp.HeapSummaryReport;
 import cdv.hdp.cursor.ChunkCursor;
-import cdv.hdp.protocol.RecordTag;
 
 import java.io.IOException;
+
+import static cdv.hdp.protocol.RecordTag.*;
 
 /**
  * High-level heap dump parser
@@ -29,7 +30,7 @@ public class HeapDumpParser extends BaseParser {
 
         while (cursor.hasMoreBytes()) {
 
-            RecordTag tag = RecordTag.find(cursor.readU1());
+            int tag = cursor.readU1();
 
             // read time
             cursor.skipBytes(ChunkCursor.U4_SIZE);
