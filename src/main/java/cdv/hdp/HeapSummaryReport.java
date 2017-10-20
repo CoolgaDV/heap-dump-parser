@@ -123,7 +123,14 @@ public class HeapSummaryReport {
                 }
                 instancesCountString = pad + instancesCountString;
             }
-            return instancesCountString + " : " + className;
+            return instancesCountString + " : " + getPrettifiedClassName();
+        }
+
+        private String getPrettifiedClassName() {
+            String prettified = className.replace('/', '.');
+            return prettified.startsWith("[L") ?
+                    prettified.substring(2, prettified.length() - 1) + "[]" :
+                    prettified;
         }
 
     }
