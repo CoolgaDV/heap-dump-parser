@@ -1,6 +1,7 @@
 package cdv.hdp.parser;
 
 import cdv.hdp.cursor.ChunkCursor;
+import cdv.hdp.report.PrimitiveArrayClassName;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,6 +20,7 @@ class HeapRecordParser extends RecordParser {
 
     private final int border;
     private final Map<Long, Long> instances = new HashMap<>();
+    private final Map<String, Long> primitiveArrayInstances = new HashMap<>();
 
     private int bytesRead;
 
@@ -29,6 +31,10 @@ class HeapRecordParser extends RecordParser {
 
     Map<Long, Long> getInstances() {
         return instances;
+    }
+
+    Map<String, Long> getPrimitiveArrayInstances() {
+        return primitiveArrayInstances;
     }
 
     void parse() {
@@ -100,7 +106,11 @@ class HeapRecordParser extends RecordParser {
     private void parsePrimitiveArrayDump() {
         skipBytes(identifierSize + U4_SIZE);
         int size = (int) readU4();
-        int valueSize = getSize(readU1());
+        int type = readU1();
+        String className = PrimitiveArrayClassName.find(type);
+        Long count = primitiveArrayInstances.get(className);
+        primitiveArrayInstances.put(className, count == null ? 1 : count + 1);
+        int valueSize = getSize(type);
         skipBytes(size * valueSize);
     }
 

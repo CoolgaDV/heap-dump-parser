@@ -1,6 +1,6 @@
 package cdv.hdp.parser;
 
-import cdv.hdp.HeapSummaryReport;
+import cdv.hdp.report.HeapSummaryReport;
 import cdv.hdp.cursor.ChunkCursor;
 
 import java.io.IOException;
@@ -63,6 +63,7 @@ public class HeapDumpParser extends BaseParser {
                             headerParser.getIdentifierSize());
                     parser.parse();
                     report.addInstances(parser.getInstances());
+                    report.addPrimitiveArrayInstances(parser.getPrimitiveArrayInstances());
                     break;
                 }
                 default: {
