@@ -35,8 +35,8 @@ class StringRecordParser extends RecordParser {
 
         id = readIdentifier();
 
-        ByteArrayOutputStream stringBuffer = new ByteArrayOutputStream();
         int stringLength = length - identifierSize;
+        ByteArrayOutputStream stringBuffer = new ByteArrayOutputStream(stringLength);
         for (int index = 0; index < stringLength; index++) {
             stringBuffer.write(cursor.readU1());
         }
