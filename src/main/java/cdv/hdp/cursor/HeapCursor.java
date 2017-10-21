@@ -38,14 +38,16 @@ public class HeapCursor implements AutoCloseable {
 
         byte[] buffer = new byte[READ_BUFFER_SIZE];
         ByteArrayOutputStream chunkBuffer = new ByteArrayOutputStream(chunkSizeLimit);
-        int read = 0;
-        while (read < chunkSizeLimit - READ_BUFFER_SIZE) {
-            read = stream.read(buffer);
-            if (read == -1) {
+        int totalRead = 0;
+        int currentRead;
+        while (totalRead < chunkSizeLimit - READ_BUFFER_SIZE) {
+            currentRead = stream.read(buffer);
+            if (currentRead == -1) {
                 noMoreChunks = true;
                 break;
             }
-            chunkBuffer.write(buffer, 0, read);
+            totalRead += currentRead;
+            chunkBuffer.write(buffer, 0, currentRead);
         }
 
         readTimeMillis += System.currentTimeMillis() - startTimeMillis;
