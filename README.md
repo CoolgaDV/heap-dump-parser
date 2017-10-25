@@ -6,15 +6,38 @@ This project is a console heap dump analyzer that can create class diagrams
 
 ## Command line arguments
 
-| Name                      | Mandatory | Description                                            |
-| :---:                     | :---:     | :---:                                                  |
-| heap.location             | true      | Heap dump file location ( absolute or relative )       |
-| instances.count.threshold | false     | Classes which instances count is below or equal <br/>
-                                          this value will not be displayed in application output |
-| chunk.size                | true      | Heap dumps can be too large to load the whole file <br/>
-                                          in memory for processing. So processing is performed <br/>
-                                          by chunks and this parameter defines the size <br/>
-                                          for each of these chunks in megabytes                  |
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Mandatory</th>
+        <th>Description</th>
+    </tr>
+    <tr>
+        <td>heap.location</td>
+        <td>true</td>
+        <td>
+            Heap dump file location ( absolute or relative )
+        </td>
+    </tr>
+    <tr>
+        <td>instances.count.threshold</td>
+        <td>false</td>
+        <td>
+            Classes which instances count is below or equal
+            this value will not be displayed in application output
+        </td>
+    </tr>
+    <tr>
+        <td>chunk.size</td>
+        <td>true</td>
+        <td>
+            Heap dumps can be too large to load the whole file
+            in memory for processing. So processing is performed
+            by chunks and this parameter defines the size
+            for each of these chunks in megabytes
+        </td>
+    </tr>
+</table>
 
 ## Example
 
