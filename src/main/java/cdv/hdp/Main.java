@@ -3,6 +3,7 @@ package cdv.hdp;
 import cdv.hdp.cursor.ChunkCursor;
 import cdv.hdp.cursor.HeapCursor;
 import cdv.hdp.parser.HeapDumpParser;
+import cdv.hdp.report.HeapSummaryReport;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -24,13 +25,17 @@ public class Main {
 
         long startTimeMillis = System.currentTimeMillis();
 
+        System.out.println();
+        System.out.println("=== Parameters ===");
+
         Path heapLocation = getHeapLocation();
         long instancesCountThreshold = getInstanceCountThreshold();
         int chunkSize = getChunkSize() * 1024 * 1024;
 
         try (HeapCursor heapCursor = new HeapCursor(chunkSize, heapLocation)) {
             ChunkCursor chunkCursor = heapCursor.init();
-            new HeapDumpParser(chunkCursor).readHeap()
+            HeapSummaryReport executionReport = new HeapDumpParser(chunkCursor).readHeap();
+            executionReport
                     .withReadTimeMillis(heapCursor.getReadTimeMillis())
                     .withTotalTimeMillis(System.currentTimeMillis() - startTimeMillis)
                     .toConsole(instancesCountThreshold);

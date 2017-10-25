@@ -3,7 +3,10 @@ package cdv.hdp.cursor;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Cursor that processes heap dump file by dividing it on chunks.
@@ -16,11 +19,16 @@ public class HeapCursor implements AutoCloseable {
 
     private static final int READ_BUFFER_SIZE = 32 * 1024;
 
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+
     private final int chunkSizeLimit;
     private final Path heapLocation;
     private FileInputStream stream;
     private boolean noMoreChunks = false;
+
     private long readTimeMillis = 0;
+    private long totalBytes;
+    private long currentBytes = 0;
 
     public HeapCursor(int chunkSizeLimit, Path heapLocation) {
         this.chunkSizeLimit = chunkSizeLimit;
@@ -29,7 +37,23 @@ public class HeapCursor implements AutoCloseable {
 
     public ChunkCursor init() throws IOException {
         stream = new FileInputStream(heapLocation.toFile());
+        totalBytes = Files.size(heapLocation);
+
+        System.out.println();
+        System.out.println("=== Execution process ===");
+
         return new ChunkCursor(this, readNextChunk());
+    }
+
+    public long getReadTimeMillis() {
+        return readTimeMillis;
+    }
+
+    @Override
+    public void close() throws IOException {
+        if (stream != null) {
+            stream.close();
+        }
     }
 
     byte[] readNextChunk() throws IOException {
@@ -49,25 +73,22 @@ public class HeapCursor implements AutoCloseable {
             totalRead += currentRead;
             chunkBuffer.write(buffer, 0, currentRead);
         }
+        byte[] chunk = chunkBuffer.toByteArray();
 
+        currentBytes += chunk.length;
         readTimeMillis += System.currentTimeMillis() - startTimeMillis;
+        System.out.println(" [" + dateFormat.format(new Date()) + "] Processed " +
+                toMegabytes(currentBytes) + " of " + toMegabytes(totalBytes) + " Mb");
 
-        return chunkBuffer.toByteArray();
+        return chunk;
     }
 
     boolean isNoMoreChunks() {
         return noMoreChunks;
     }
 
-    public long getReadTimeMillis() {
-        return readTimeMillis;
-    }
-
-    @Override
-    public void close() throws IOException {
-        if (stream != null) {
-            stream.close();
-        }
+    private long toMegabytes(long bytes) {
+        return bytes / (1024 * 1024);
     }
 
 }
