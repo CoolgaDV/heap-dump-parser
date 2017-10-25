@@ -9,11 +9,11 @@ This project is a console heap dump analyzer that can create class diagrams
 | Name                      | Mandatory | Description                                            |
 | :---:                     | :---:     | :---:                                                  |
 | heap.location             | true      | Heap dump file location ( absolute or relative )       |
-| instances.count.threshold | false     | Classes which instances count is below or equal 
+| instances.count.threshold | false     | Classes which instances count is below or equal <br/>
                                           this value will not be displayed in application output |
-| chunk.size                | true      | Heap dumps can be too large to load the whole file 
-                                          in memory for processing. So processing is performed 
-                                          by chunks and this parameter defines the size 
+| chunk.size                | true      | Heap dumps can be too large to load the whole file <br/>
+                                          in memory for processing. So processing is performed <br/>
+                                          by chunks and this parameter defines the size <br/>
                                           for each of these chunks in megabytes                  |
 
 ## Example
